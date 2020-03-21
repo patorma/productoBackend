@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.patricio.contreras.entity.Producto;
 import com.patricio.contreras.service.ProductoService;
 
+import lombok.NonNull;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +64,7 @@ public class ProductoRestController {
 	}
 	
 	@PostMapping("/producto")
+	@NonNull
 	public ResponseEntity<?> create(@RequestBody Producto producto){
 		//Es el nuevo producto creado	
 		Producto productoNew = null;
@@ -106,6 +109,11 @@ public class ProductoRestController {
 		  if(productoActual == null) {
 			  response.put("mensaje", "Error: no se pudo editar, el producto ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
 				return new ResponseEntity<Map<String, Object>>(response,HttpStatus.NOT_FOUND);
+		  }
+		  
+		  if(productoService.existePorNombre(producto.getNombreProducto())&& productoService.obtenerPorNombre(producto.getNombreProducto()).getId() !=id) {
+				response.put("mensaje", "Ese nombre del producto existe!!!");
+				return new ResponseEntity<Map<String, Object>>(response,HttpStatus.BAD_REQUEST);
 		  }
 		try {
 			//modificamos los datos del producto actual con los datos del producto que te envien
