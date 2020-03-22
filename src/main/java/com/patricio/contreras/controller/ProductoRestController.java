@@ -76,6 +76,10 @@ public class ProductoRestController {
 				return new ResponseEntity<Map<String, Object>>(response,HttpStatus.BAD_REQUEST);
 			}
 			
+			if(productoService.existePorNombre(producto.getNombreProducto())) {
+				response.put("mensaje", "Ese nombre de producto ya se encuentra registrado!!");
+				return new ResponseEntity<Map<String, Object>>(response,HttpStatus.BAD_REQUEST);
+			}
 			if( (Integer)producto.getPrecio() == null || producto.getPrecio() == 0) {
 				response.put("mensaje", "El Precio del producto es obligatorio!!!");
 				return new ResponseEntity<Map<String, Object>>(response,HttpStatus.BAD_REQUEST);
@@ -112,7 +116,7 @@ public class ProductoRestController {
 		  }
 		  
 		  if(productoService.existePorNombre(producto.getNombreProducto())&& productoService.obtenerPorNombre(producto.getNombreProducto()).getId() !=id) {
-				response.put("mensaje", "Ese nombre del producto existe!!!");
+				response.put("mensaje", "Ese nombre de producto ya existe!!!");
 				return new ResponseEntity<Map<String, Object>>(response,HttpStatus.BAD_REQUEST);
 		  }
 		try {
