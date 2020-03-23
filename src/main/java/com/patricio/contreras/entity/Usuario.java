@@ -1,5 +1,6 @@
 package com.patricio.contreras.entity;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -8,6 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -20,8 +24,10 @@ import lombok.NonNull;
 @Data
 @Table(name = "usuarios")
 @NonNull
-public class Usuario {
+public class Usuario implements Serializable {
 	
+
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -45,8 +51,29 @@ public class Usuario {
 	
 	
 	@NotNull
+	@ManyToMany
+	@JoinTable(name = "usuario_rol",joinColumns = @JoinColumn(name="usuario_id"),inverseJoinColumns = @JoinColumn(name="rol_id"))
+	private Set<Rol> roles;
+	
+	public Usuario() {
+		
+	}
+	
 
-	private Set<Rol> roles  =new HashSet<>();
+	public Usuario(@NotNull String nombre, @NotNull String apellido, @NotNull String nombreUsuario,
+			@NotNull String email, @NotNull String password) {
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.nombreUsuario = nombreUsuario;
+		this.email = email;
+		this.password = password;
+	}
+
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	
 
